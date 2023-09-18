@@ -1,29 +1,10 @@
-.DS_Store
-node_modules
-/dist
+cls
 
 
+git init
+git add -A
+git commit -m "deploy"
 
 
-# arquivos com variáveis de ambiente
-.env.local
-.env.*.local
-
-
-# Arquivos de log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-
-*.bat
+git push -f https://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@github.com/GabrielAmbuzeiro/IndusManager.git master:gh-pages
 
