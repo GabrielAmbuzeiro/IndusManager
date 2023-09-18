@@ -1,0 +1,36 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+#campo_login{
+  width: 53%;
+margin-left: 24%;
+margin-top: 3%;
+}
+#campo_logo{
+  margin-left: 35%;
+margin-top: 5%;
+}
+#logo{
+  
+}
+@media only screen and (max-device-width: 1024px)  {
+#logo{
+  margin-top: 11%;
+}
+  #campo_logo{
+    margin-left: 5%;
+    
+  }
+  #campo_login{
+      width: 53%;
+  margin-left: 24%;
+  margin-top: 8%;
+}
+  }
+
+@media only screen and (min-device-height: 1024px){
+  #campo_logo{
+                  margin-left:35%;
+              }
+}

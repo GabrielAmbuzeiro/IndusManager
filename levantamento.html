@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+   <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gernciamento de manutenção</title>
+  <style>
+    #bc{
+      background-repeat: no-repeat;
+      
+      background-size: cover;
+    }
+   #btnp{
+     padding: 5px;
+   }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    #mais{
+      text-align: center;
+      text-align: inherit;
+    }
+    #bm{margin-bottom: 20px;
+       margin-top: 20px;}
+    #table{
+      width: 100%;
+      overflow-x:scroll ;
+    }
+    #logo{
+      width: 400px;
+      height: 65px;
+    }
+    img{width: 210px;}
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper yellow darken-1">
+      <a href="#" id="logo" class="brand-logo yellow darken-1" ><img src="logo.png"></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down yellow darken-1">
+        <li> <a href="../gerarOM.html">Gerar OM</a></li>
+        <li> <a href="../levantamento.html">Gerar Levantamento </a></li>
+        <li><a href="index.html">Pagina Inicial</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div id="bc">
+  <div id="app" class="container">
+    
+    <form @submit.prevent="attdetabela">
+      <div>
+        <label for="quantidade">Quantidade</label>
+        <input type="number" id="quandidade" v-model="addmaquina.quantidade" required>
+      </div>
+       <div>
+        <label for="Peca">Peça</label>
+        <input type="text" id="Peca" v-model="addmaquina.peca" required>
+      </div>
+       <div>
+        <label for="Codigo">Codigo</label>
+        <input type="text" id="codigo" v-model="addmaquina.codigo" required>
+      </div>
+       <div>
+        <label for="modelo">Modelo da Máquina:</label>
+        <input type="text" id="modelo" v-model="addmaquina.modelo" required>
+      </div>
+      
+      <div>
+        <button id= "bm"class="btn-floating btn-large waves-effect  orange darken-3"type="submit"><i  id="mais" class="material-icons">add</i></button>
+        <button type="button" @click="cancelar" v-show="edita" class="btn-floating btn-large waves-effect   red darken-1"><i class="material-icons">cancel</i></button>
+      </div>
+    </form>
+    <div id="table">
+    <table>
+      <thead>
+        <tr>
+          <th>Quantidae</th>
+          <th>Peça</th>
+          <th>Codigo</th>
+          <th>Modelo de Maquina</th>
+        
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(maq, index) in lev" :key="index">
+          <td>{{ maq.quantidade }}</td>
+          <td>{{ maq.peca }}</td>
+          <td>{{ maq.codigo }}</td>
+          <td>{{ maq.modelo }}</td>
+          <td>
+            <button id="btnp" class="waves-effect  orange darken-3 btn-small" @click="edtmaq(index)"><i class="material-icons">edit</i></button>
+            <button id="btnp" class="waves-effect  red darken-1 btn-small" @click="excluirmaq(index)"><i class="material-icons">delete</i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script>
+    var att = '<span style="color: red;">att</span>';
+
+    
+    
+   
+    new Vue({
+      el: '#app',
+      data: {
+        lev: JSON.parse(localStorage.getItem('lev')) || [],
+        addmaquina: {
+          quantidade: '',
+          peca: '',
+          codigo: '',
+          modelo: '',
+        },
+        edita: false,
+        editingIndex: null,
+      },
+      methods: {
+        attdetabela() {
+          if (this.edita) {
+             document.querySelector('#mais').innerHTML = '<i class="material-icons">add</i>'
+            this.lev[this.editingIndex] = { ...this.addmaquina };
+            this.edita = false;
+            this.editingIndex = null;
+          } else {
+            
+            this.lev.push({ ...this.addmaquina });
+          }
+          this.addmaquina = {
+            quantidade: '',
+            peca: '',
+            codigo: '',
+            modelo: '',
+          };
+          localStorage.setItem('lev', JSON.stringify(this.lev));
+        },
+        edtmaq(index) {
+          document.querySelector('#mais').innerHTML = '<i class="material-icons">cached</i>'
+          
+          this.addmaquina = { ...this.lev[index] };
+          this.edita = true;
+          this.editingIndex = index;
+        },
+        cancelar() {
+          document.querySelector('#mais').innerHTML = '<i class="material-icons">add</i>'
+          this.edita = false;
+          this.editingIndex = null;
+          this.addmaquina = {
+            quantidade: '',
+            peca: '',
+            codigo: '',
+            modelo: '',
+            
+          };
+        },
+        excluirmaq(index) {
+          if (confirm('Tem certeza de que deseja excluir esta máquina?')) {
+            this.lev.splice(index, 1);
+            localStorage.setItem('lev', JSON.stringify(this.lev));
+          }
+        },
+      },
+      
+    });
+  </script>
+</body>
+</html>
+
